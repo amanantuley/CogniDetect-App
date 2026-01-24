@@ -140,10 +140,10 @@ class AppTheme {
     dividerColor: dividerLight,
 
     // AppBar theme - minimal elevation
-    appBarTheme: AppBarThemeData(
+    appBarTheme: AppBarTheme(
       backgroundColor: surfaceLight,
       foregroundColor: textPrimaryLight,
-      elevation: 1.0, // Minimal elevation per Visual Standards
+      elevation: 1.0,
       shadowColor: shadowLight,
       centerTitle: true,
       titleTextStyle: GoogleFonts.inter(
@@ -152,7 +152,10 @@ class AppTheme {
         color: textPrimaryLight,
         letterSpacing: 0.15,
       ),
-      iconTheme: const IconThemeData(color: textPrimaryLight, size: 24),
+      iconTheme: const IconThemeData(
+        color: textPrimaryLight,
+        size: 24,
+      ),
     ),
 
     // Card theme - subtle elevation with rounded corners
@@ -483,7 +486,7 @@ class AppTheme {
     scaffoldBackgroundColor: backgroundDark,
     cardColor: cardDark,
     dividerColor: dividerDark,
-    appBarTheme: AppBarThemeData(
+    appBarTheme: AppBarTheme(
       backgroundColor: surfaceDark,
       foregroundColor: textPrimaryDark,
       elevation: 1.0,
@@ -495,7 +498,10 @@ class AppTheme {
         color: textPrimaryDark,
         letterSpacing: 0.15,
       ),
-      iconTheme: const IconThemeData(color: textPrimaryDark, size: 24),
+      iconTheme: const IconThemeData(
+        color: textPrimaryDark,
+        size: 24,
+      ),
     ),
     cardTheme: CardThemeData(
       color: cardDark,
