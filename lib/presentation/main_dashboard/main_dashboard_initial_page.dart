@@ -16,7 +16,7 @@ class MainDashboardInitialPage extends StatefulWidget {
 }
 
 class _MainDashboardInitialPageState extends State<MainDashboardInitialPage> {
-  final String userName = "Sarah";
+  final String userName = "Aman";
   int completedModules = 1;
   final int totalModules = 4;
   bool isRefreshing = false;
@@ -343,3 +343,4 @@ class _MainDashboardInitialPageState extends State<MainDashboardInitialPage> {
     );
   }
 }
+
