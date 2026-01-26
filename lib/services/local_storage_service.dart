@@ -1,21 +1,27 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
-import 'package:path_provider/path_provider.dart';
-import 'dart:io';
+import 'dart:io' if (dart.library.html) 'dart:html' as platform;
+import 'package:path_provider/path_provider.dart'
+    if (dart.library.html) 'package:path_provider/path_provider.dart';
 
 /// Advanced local storage service for persisting data
+/// Note: On web, this uses localStorage instead of file system
 class LocalStorageService {
   static final LocalStorageService _instance = LocalStorageService._internal();
   factory LocalStorageService() => _instance;
   LocalStorageService._internal();
 
-  late Directory _appDocDir;
+  Directory? _appDocDir;
   bool _initialized = false;
 
   /// Initialize storage service
   Future<void> initialize() async {
     if (_initialized) return;
-    _appDocDir = await getApplicationDocumentsDirectory();
+    
+    // Skip directory initialization on web
+    if (!kIsWeb) {
+      _appDocDir = await getApplicationDocumentsDirectory();
+    }
     _initialized = true;
   }
 
@@ -23,7 +29,12 @@ class LocalStorageService {
   Future<bool> saveJson(String key, Map<String, dynamic> data) async {
     try {
       await _ensureInitialized();
-      final file = File('${_appDocDir.path}/$key.json');
+      if (kIsWeb) {
+        // On web, we can't use file storage, so we'll skip or use localStorage
+        if (kDebugMode) print('[LocalStorage] Web storage not implemented for $key');
+        return false;
+      }
+      final file = platform.File('${_appDocDir!.path}/$key.json');
       await file.writeAsString(jsonEncode(data));
       return true;
     } catch (e) {
@@ -36,7 +47,11 @@ class LocalStorageService {
   Future<Map<String, dynamic>?> loadJson(String key) async {
     try {
       await _ensureInitialized();
-      final file = File('${_appDocDir.path}/$key.json');
+      if (kIsWeb) {
+        // On web, we can't use file storage
+        return null;
+      }
+      final file = platform.File('${_appDocDir!.path}/$key.json');
       if (!await file.exists()) return null;
       final contents = await file.readAsString();
       return jsonDecode(contents) as Map<String, dynamic>;
@@ -50,7 +65,10 @@ class LocalStorageService {
   Future<bool> saveString(String key, String value) async {
     try {
       await _ensureInitialized();
-      final file = File('${_appDocDir.path}/$key.txt');
+      if (kIsWeb) {
+        return false;
+      }
+      final file = platform.File('${_appDocDir!.path}/$key.txt');
       await file.writeAsString(value);
       return true;
     } catch (e) {
@@ -63,7 +81,10 @@ class LocalStorageService {
   Future<String?> loadString(String key) async {
     try {
       await _ensureInitialized();
-      final file = File('${_appDocDir.path}/$key.txt');
+      if (kIsWeb) {
+        return null;
+      }
+      final file = platform.File('${_appDocDir!.path}/$key.txt');
       if (!await file.exists()) return null;
       return await file.readAsString();
     } catch (e) {
@@ -76,7 +97,10 @@ class LocalStorageService {
   Future<bool> saveList(String key, List<dynamic> data) async {
     try {
       await _ensureInitialized();
-      final file = File('${_appDocDir.path}/$key.json');
+      if (kIsWeb) {
+        return false;
+      }
+      final file = platform.File('${_appDocDir!.path}/$key.json');
       await file.writeAsString(jsonEncode(data));
       return true;
     } catch (e) {
@@ -89,7 +113,10 @@ class LocalStorageService {
   Future<List<dynamic>?> loadList(String key) async {
     try {
       await _ensureInitialized();
-      final file = File('${_appDocDir.path}/$key.json');
+      if (kIsWeb) {
+        return null;
+      }
+      final file = platform.File('${_appDocDir!.path}/$key.json');
       if (!await file.exists()) return null;
       final contents = await file.readAsString();
       return jsonDecode(contents) as List<dynamic>;
@@ -103,8 +130,11 @@ class LocalStorageService {
   Future<bool> delete(String key) async {
     try {
       await _ensureInitialized();
-      final jsonFile = File('${_appDocDir.path}/$key.json');
-      final txtFile = File('${_appDocDir.path}/$key.txt');
+      if (kIsWeb) {
+        return false;
+      }
+      final jsonFile = platform.File('${_appDocDir!.path}/$key.json');
+      final txtFile = platform.File('${_appDocDir!.path}/$key.txt');
       
       if (await jsonFile.exists()) await jsonFile.delete();
       if (await txtFile.exists()) await txtFile.delete();
@@ -119,8 +149,11 @@ class LocalStorageService {
   Future<bool> exists(String key) async {
     try {
       await _ensureInitialized();
-      final jsonFile = File('${_appDocDir.path}/$key.json');
-      final txtFile = File('${_appDocDir.path}/$key.txt');
+      if (kIsWeb) {
+        return false;
+      }
+      final jsonFile = platform.File('${_appDocDir!.path}/$key.json');
+      final txtFile = platform.File('${_appDocDir!.path}/$key.txt');
       return await jsonFile.exists() || await txtFile.exists();
     } catch (e) {
       return false;
@@ -131,10 +164,13 @@ class LocalStorageService {
   Future<bool> clearAll() async {
     try {
       await _ensureInitialized();
-      final dir = Directory(_appDocDir.path);
+      if (kIsWeb) {
+        return false;
+      }
+      final dir = platform.Directory(_appDocDir!.path);
       if (await dir.exists()) {
         await for (final file in dir.list()) {
-          if (file is File) {
+          if (file is platform.File) {
             await file.delete();
           }
         }
@@ -150,11 +186,14 @@ class LocalStorageService {
   Future<int> getStorageSize() async {
     try {
       await _ensureInitialized();
+      if (kIsWeb) {
+        return 0;
+      }
       int totalSize = 0;
-      final dir = Directory(_appDocDir.path);
+      final dir = platform.Directory(_appDocDir!.path);
       if (await dir.exists()) {
         await for (final file in dir.list()) {
-          if (file is File) {
+          if (file is platform.File) {
             totalSize += await file.length();
           }
         }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:sizer/sizer.dart';
 
 import '../core/app_export.dart';
@@ -28,20 +29,27 @@ void main() async {
     return SizedBox.shrink();
   };
 
-  // 🚨 CRITICAL: Device orientation lock - DO NOT REMOVE
-  Future.wait([
-    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
-  ]).then((value) {
+  // 🚨 CRITICAL: Device orientation lock - DO NOT REMOVE (Skip on web)
+  if (kIsWeb) {
+    // Web doesn't support orientation lock
     runApp(MyApp());
-  });
+  } else {
+    Future.wait([
+      SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]),
+    ]).then((value) {
+      runApp(MyApp());
+    });
+  }
 }
 
 /// Initialize all app services
 Future<void> _initializeServices() async {
   try {
-    // Initialize storage service
-    final storage = LocalStorageService();
-    await storage.initialize();
+    // Initialize storage service (skip on web - not supported)
+    if (!kIsWeb) {
+      final storage = LocalStorageService();
+      await storage.initialize();
+    }
     
     // Initialize state manager
     final stateManager = AppStateManager();
@@ -53,13 +61,15 @@ Future<void> _initializeServices() async {
       title: 'Get Started',
     );
     
-    // Schedule daily reminder (example)
-    final tomorrow = DateTime.now().add(const Duration(days: 1));
-    notificationService.scheduleReminder(
-      title: 'Daily Assessment',
-      message: 'Complete your cognitive assessment today!',
-      scheduledTime: DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 9, 0),
-    );
+    // Schedule daily reminder (example) - skip on web
+    if (!kIsWeb) {
+      final tomorrow = DateTime.now().add(const Duration(days: 1));
+      notificationService.scheduleReminder(
+        title: 'Daily Assessment',
+        message: 'Complete your cognitive assessment today!',
+        scheduledTime: DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 9, 0),
+      );
+    }
     
     print('✅ All services initialized successfully');
   } catch (e) {
