@@ -8,6 +8,9 @@ import '../widgets/custom_error_widget.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Initialize services
+  await _initializeServices();
+
   bool hasShownError = false;
 
   // 🚨 CRITICAL: Custom error handling - DO NOT REMOVE
@@ -33,6 +36,37 @@ void main() async {
   });
 }
 
+/// Initialize all app services
+Future<void> _initializeServices() async {
+  try {
+    // Initialize storage service
+    final storage = LocalStorageService();
+    await storage.initialize();
+    
+    // Initialize state manager
+    final stateManager = AppStateManager();
+    
+    // Show welcome notification
+    final notificationService = NotificationService();
+    notificationService.showInfo(
+      'Welcome to CogniDetect!',
+      title: 'Get Started',
+    );
+    
+    // Schedule daily reminder (example)
+    final tomorrow = DateTime.now().add(const Duration(days: 1));
+    notificationService.scheduleReminder(
+      title: 'Daily Assessment',
+      message: 'Complete your cognitive assessment today!',
+      scheduledTime: DateTime(tomorrow.year, tomorrow.month, tomorrow.day, 9, 0),
+    );
+    
+    print('✅ All services initialized successfully');
+  } catch (e) {
+    print('⚠️ Error initializing services: $e');
+  }
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -41,7 +75,7 @@ class MyApp extends StatelessWidget {
     return Sizer(
       builder: (context, orientation, screenType) {
         return MaterialApp(
-          title: 'cognidetect',
+          title: 'CogniDetect - Advanced Cognitive Assessment',
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: ThemeMode.light,
