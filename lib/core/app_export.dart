@@ -12,3 +12,6 @@ export '../services/analytics_service.dart';
 export '../services/notification_service.dart';
 export '../services/local_storage_service.dart';
 export '../services/ai_analysis_service.dart';
+export '../utils/app_error_handler.dart';
+export '../utils/navigation_service.dart';
+export '../config/app_config.dart';

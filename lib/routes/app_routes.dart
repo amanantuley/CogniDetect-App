@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../presentation/main_dashboard/main_dashboard.dart';
+import '../presentation/home_screen/enhanced_home_screen.dart';
 import '../presentation/google_login_screen/google_login_screen.dart';
 import '../presentation/speech_analysis_module/speech_analysis_module.dart';
 import '../presentation/cognitive_games_module/cognitive_games_module.dart';
@@ -15,6 +16,7 @@ import '../presentation/ai_insights_screen/ai_insights_screen.dart';
 class AppRoutes {
   // Main Routes
   static const String initial = '/';
+  static const String home = '/home';
   static const String mainDashboard = '/main-dashboard';
   static const String googleLogin = '/google-login-screen';
   
@@ -36,6 +38,7 @@ class AppRoutes {
 
   static Map<String, WidgetBuilder> routes = {
     initial: (context) => const GoogleLoginScreen(),
+    home: (context) => const EnhancedHomeScreen(),
     mainDashboard: (context) => const MainDashboard(),
     googleLogin: (context) => const GoogleLoginScreen(),
     
