@@ -147,7 +147,8 @@ class _AnimatedProgressRingState extends State<AnimatedProgressRing>
       _animation = Tween<double>(
         begin: oldWidget.progress,
         end: widget.progress,
-      ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
+      ).animate(
+          CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
       _controller.reset();
       _controller.forward();
     }
@@ -276,7 +277,8 @@ class _PulseAnimationState extends State<PulseAnimation>
   void initState() {
     super.initState();
     _controller = AnimationController(vsync: this, duration: widget.duration);
-    _animation = Tween<double>(begin: widget.minScale, end: widget.maxScale).animate(
+    _animation =
+        Tween<double>(begin: widget.minScale, end: widget.maxScale).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
     if (widget.repeat) {

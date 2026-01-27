@@ -94,27 +94,4 @@ class ApiStatus {
 }
 
 /// Error Messages
-class ErrorMessages {
-  ErrorMessages._();
-
-  static const String networkError = 'Network connection failed. Please try again.';
-  static const String serverError = 'Server error occurred. Please try again later.';
-  static const String unauthorizedError = 'Unauthorized access. Please login again.';
-  static const String notFoundError = 'Resource not found.';
-  static const String timeoutError = 'Request timeout. Please try again.';
-  static const String unknownError = 'An unknown error occurred.';
-  static const String validationError = 'Invalid input. Please check your data.';
-  static const String storageError = 'Failed to save data locally.';
-  static const String permissionError = 'Permission denied. Please grant access.';
-}
-
-/// Success Messages
-class SuccessMessages {
-  SuccessMessages._();
-
-  static const String assessmentComplete = 'Assessment completed successfully!';
-  static const String profileUpdated = 'Profile updated successfully!';
-  static const String dataSaved = 'Data saved successfully!';
-  static const String dataDeleted = 'Data deleted successfully!';
-  static const String settingsUpdated = 'Settings updated successfully!';
-}
+// class ErrorMessages {
