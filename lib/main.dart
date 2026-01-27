@@ -82,6 +82,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final navigationService = NavigationService();
     return Sizer(
       builder: (context, orientation, screenType) {
         return MaterialApp(
@@ -89,6 +90,7 @@ class MyApp extends StatelessWidget {
           theme: AppTheme.lightTheme,
           darkTheme: AppTheme.darkTheme,
           themeMode: ThemeMode.light,
+          navigatorKey: navigationService.navigationKey,
           // 🚨 CRITICAL: NEVER REMOVE OR MODIFY
           builder: (context, child) {
             return MediaQuery(
