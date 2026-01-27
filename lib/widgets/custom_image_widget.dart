@@ -1,8 +1,9 @@
-import 'dart:io';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../core/app_export.dart';
+import 'file_image_io.dart' if (dart.library.html) 'file_image_web.dart';
 
 extension ImageTypeExtension on String {
   ImageType get imageType {
@@ -10,7 +11,7 @@ extension ImageTypeExtension on String {
       return ImageType.network;
     } else if (endsWith('.svg')) {
       return ImageType.svg;
-    } else if (startsWith('file: //')) {
+    } else if (startsWith('file://')) {
       return ImageType.file;
     } else {
       return ImageType.png;
@@ -129,13 +130,15 @@ class CustomImageWidget extends StatelessWidget {
             ),
           );
         case ImageType.file:
-          return Image.file(
-            File(imageUrl!),
+          return buildFileImage(
+            imageUrl!,
             height: height,
             width: width,
             fit: fit ?? BoxFit.cover,
             color: color,
             semanticLabel: semanticLabel,
+            fallbackAsset: placeHolder,
+            errorWidget: errorWidget,
           );
         case ImageType.network:
           return CachedNetworkImage(

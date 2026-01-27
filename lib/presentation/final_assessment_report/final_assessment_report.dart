@@ -1,13 +1,10 @@
-import 'dart:io' if (dart.library.io) 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:sizer/sizer.dart';
-import 'package:universal_html/html.dart' as html;
+import 'save_pdf_io.dart' if (dart.library.html) 'save_pdf_web.dart';
 
 import '../../core/app_export.dart';
 import '../../widgets/custom_icon_widget.dart';
@@ -303,19 +300,7 @@ class _FinalAssessmentReportState extends State<FinalAssessmentReport> {
       );
 
       final bytes = await pdf.save();
-
-      if (kIsWeb) {
-        final blob = html.Blob([bytes], 'application/pdf');
-        final url = html.Url.createObjectUrlFromBlob(blob);
-        final anchor = html.AnchorElement(href: url)
-          ..setAttribute("download", "cognidetect_report.pdf")
-          ..click();
-        html.Url.revokeObjectUrl(url);
-      } else {
-        final directory = await getApplicationDocumentsDirectory();
-        final file = File('${directory.path}/cognidetect_report.pdf');
-        await file.writeAsBytes(bytes);
-      }
+      await savePdfBytes(bytes, filename: 'cognidetect_report.pdf');
 
       Fluttertoast.showToast(
         msg: "Report downloaded successfully",
