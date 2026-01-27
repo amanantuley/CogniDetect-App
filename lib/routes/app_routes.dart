@@ -5,7 +5,7 @@ import '../presentation/google_login_screen/google_login_screen.dart';
 import '../presentation/speech_analysis_module/speech_analysis_module.dart';
 import '../presentation/cognitive_games_module/cognitive_games_module.dart';
 import '../presentation/final_assessment_report/final_assessment_report.dart';
-import '../presentation/eye_movement_detection_module/eye_movement_detection_module.dart';
+import '../presentation/eye_movement_detection_module/index.dart';
 import '../presentation/reaction_time_module/reaction_time_module.dart';
 import '../presentation/memory_matrix_module/memory_matrix_module.dart';
 import '../presentation/settings_screen/settings_screen.dart';
