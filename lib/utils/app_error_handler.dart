@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-import '../config/app_config.dart';
 
 /// Centralized Error Handler for the Application
 class AppErrorHandler {
@@ -20,7 +19,7 @@ class AppErrorHandler {
     bool showNotification = true,
   }) {
     debugPrint('❌ [ERROR in $context]: $error');
-    
+
     final message = _getErrorMessage(error);
     if (showNotification) {
       _showErrorDialog(context, message, onRetry);
@@ -30,24 +29,24 @@ class AppErrorHandler {
   /// Get user-friendly error message
   static String _getErrorMessage(dynamic error) {
     final errorString = error.toString();
-    
-    if (errorString.contains('SocketException') || 
+
+    if (errorString.contains('SocketException') ||
         errorString.contains('HandshakeException')) {
       return ErrorMessages.networkError;
     }
-    
+
     if (errorString.contains('TimeoutException')) {
       return ErrorMessages.timeoutError;
     }
-    
+
     if (errorString.contains('FileSystemException')) {
       return ErrorMessages.storageError;
     }
-    
+
     if (errorString.contains('FormatException')) {
       return ErrorMessages.dataFormatError;
     }
-    
+
     return ErrorMessages.unknownError;
   }
 
@@ -112,24 +111,31 @@ class AppErrorHandler {
 
 /// Error Messages Repository
 class ErrorMessages {
-  static const String networkError = 'Network connection failed. Please check your internet.';
+  static const String networkError =
+      'Network connection failed. Please check your internet.';
   static const String timeoutError = 'Request timed out. Please try again.';
-  static const String storageError = 'Storage error occurred. Please check app permissions.';
+  static const String storageError =
+      'Storage error occurred. Please check app permissions.';
   static const String dataFormatError = 'Data format error. Please try again.';
-  static const String unknownError = 'An unexpected error occurred. Please try again.';
-  static const String assessmentLoadError = 'Failed to load assessment. Please try again.';
-  static const String assessmentSaveError = 'Failed to save assessment results.';
+  static const String unknownError =
+      'An unexpected error occurred. Please try again.';
+  static const String assessmentLoadError =
+      'Failed to load assessment. Please try again.';
+  static const String assessmentSaveError =
+      'Failed to save assessment results.';
   static const String userDataLoadError = 'Failed to load user data.';
   static const String analyticsError = 'Analytics tracking failed.';
   static const String notificationError = 'Failed to send notification.';
   static const String storagePermissionError = 'Storage permission denied.';
-  static const String microphonePermissionError = 'Microphone permission denied.';
+  static const String microphonePermissionError =
+      'Microphone permission denied.';
   static const String cameraPermissionError = 'Camera permission denied.';
 }
 
 /// Success Messages Repository
 class SuccessMessages {
-  static const String assessmentCompleted = 'Assessment completed successfully!';
+  static const String assessmentCompleted =
+      'Assessment completed successfully!';
   static const String dataSaved = 'Data saved successfully.';
   static const String settingsUpdated = 'Settings updated successfully.';
   static const String profileUpdated = 'Profile updated successfully.';
@@ -172,7 +178,7 @@ class AppLogger {
     final prefix = _getLevelPrefix(entry.level);
     final contextStr = entry.context != null ? '[${entry.context}] ' : '';
     final errorStr = entry.error != null ? '\n  Error: ${entry.error}' : '';
-    
+
     debugPrint(
       '$prefix ${entry.timestamp.hour}:${entry.timestamp.minute}:${entry.timestamp.second} '
       '$contextStr${entry.message}$errorStr',
